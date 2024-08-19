@@ -1,0 +1,29 @@
+name: Build and deploy Next.Js app to Amazon EC2 - Lingo
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Create .env file
+        run: echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}" >> .env && echo "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}" >> .env && echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env && echo "SITE_URL=${{ secrets.SITE_URL }}" >> .env
+      - name: Build Docker Image
+        run: docker build -t hrj06/lingo .
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Publish Image to Docker Hub
+        run: docker push hrj06/lingo:latest
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps: 
+      - name: Pull Image from Docker Hub
+        run: docker pull hrj06/lingo:latest
+      - name: Delete old container
+        run: docker rm -f lingo
+      - name: Run Docker container
+        run: docker run -d -p 3000:3000 --name lingo-ec2-container hrj06/lingo

@@ -1,6 +1,6 @@
-import type { PropsWithChildren } from "react";
 import MobileHeader from "@/components/MobileHeader";
 import {Sidebar} from "@/components/Sidebar";
+import {PropsWithChildren} from "react";
 
 
 const MainLayout = ({ children }: PropsWithChildren) => {

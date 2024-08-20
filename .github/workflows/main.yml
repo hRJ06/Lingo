@@ -24,6 +24,6 @@ jobs:
       - name: Pull Image from Docker Hub
         run: docker pull hrj06/lingo:latest
       - name: Delete old container
-        run: docker rm -f lingo
+        run: docker rm -f lingo-ec2-container
       - name: Run Docker container
         run: docker run -d -p 3000:3000 --name lingo-ec2-container hrj06/lingo

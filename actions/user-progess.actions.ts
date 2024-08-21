@@ -2,7 +2,7 @@
 import {auth, currentUser} from "@clerk/nextjs/server";
 import {getCourseById, getUserProgress} from "@/db/queries";
 import {userProgress} from "@/db/schema";
-import db from "@/db/dirzzle";
+import db from "@/db/drizzle";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 

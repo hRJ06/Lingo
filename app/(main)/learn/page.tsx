@@ -2,15 +2,17 @@ import {StickyWrapper} from "@/components/StickWrapper";
 import {FeedWrapper} from "@/components/FeedWrapper";
 import {Header} from "@/app/(main)/learn/Header";
 import {UserProgress} from "@/components/UserProgress";
-import {getUnits, getUserProgress} from "@/db/queries";
+import {getCourseProgress, getLessonPercentage, getUnits, getUserProgress} from "@/db/queries";
 import {redirect} from "next/navigation";
 import {Unit} from "@/app/(main)/learn/Unit";
 
 const page = async () => {
     const unitsPromise = getUnits();
     const userProgressPromise = getUserProgress();
-    const [userProgress, units] = await Promise.all([userProgressPromise, unitsPromise])
-    if (!userProgress || !userProgress.activeCourse) redirect("/courses")
+    const courseProgressPromise = getCourseProgress();
+    const lessonPercentagePromise = getLessonPercentage();
+    const [userProgress, units, courseProgress, lessonPercentage] = await Promise.all([userProgressPromise, unitsPromise, courseProgressPromise, lessonPercentagePromise])
+    if (!userProgress || !userProgress.activeCourse || !courseProgress) redirect("/courses");
     return (
         <div className='flex flex-row-reverse gap-[48px] px-6'>
             <StickyWrapper>
@@ -33,8 +35,8 @@ const page = async () => {
                                     description={unit.description}
                                     title={unit.title}
                                     lessons={unit.lessons}
-                                    activeLesson={undefined}
-                                    activeLessonPercentage={0}
+                                    activeLesson={courseProgress.activeLesson}
+                                    activeLessonPercentage={lessonPercentage}
                                 />
                             }
                         </div>

@@ -41,6 +41,23 @@ export const Quiz = ({
     if (status !== "none") return;
     setSelectedOption(id);
   };
+  const onNext = () => {
+    setActiveIndex((current) => current + 1);
+  };
+  const onContinue = () => {
+    if (!selectedOption) return;
+    if (status === "wrong") {
+      setStatus("none");
+      setSelectedOption(undefined);
+      return;
+    }
+    if (status === "correct") {
+      onNext();
+      setStatus("none");
+      setSelectedOption(undefined);
+    }
+    
+  };
   const title =
     challenge.type !== "ASSIST"
       ? challenge.question
@@ -75,11 +92,7 @@ export const Quiz = ({
           </div>
         </div>
       </div>
-      <Footer
-        disabled={!selectedOption}
-        status={status}
-        onCheck={() => {}}
-      />
+      <Footer disabled={!selectedOption} status={status} onCheck={() => {}} />
     </>
   );
 };

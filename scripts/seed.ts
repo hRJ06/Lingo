@@ -149,23 +149,51 @@ const main = async () => {
     await db.insert(schema.challengeOptions).values([
       {
         challengeId: 3,
+        imageSrc: "/man.svg",
         correct: false,
         text: "el hombre",
         audioSrc: "/es_man.mp3",
       },
       {
         challengeId: 3,
+        imageSrc: "/woman.svg",
         correct: false,
         text: "la mujer",
         audioSrc: "/es_woman.mp3",
       },
       {
         challengeId: 3,
+        imageSrc: "/robot.svg",
         correct: true,
         text: "el robot",
         audioSrc: "/es_robot.mp3",
       },
     ]);
+
+    await db.insert(schema.challenges).values([
+      {
+        id: 4,
+        lessonId: 2,
+        type: "SELECT",
+        order: 1,
+        question: 'Which one of these is the "man"?',
+      },
+      {
+        id: 5,
+        lessonId: 2,
+        type: "ASSIST",
+        order: 2,
+        question: '"the man"',
+      },
+      {
+        id: 6,
+        lessonId: 2,
+        type: "SELECT",
+        order: 3,
+        question: 'Which one of these is "the robot"?',
+      },
+    ]);
+
   } catch (error) {
     console.error(error);
     throw new Error("Failed to seed the DB.");

@@ -42,7 +42,7 @@ export const Quiz = ({
     const uncompletedIndex = challenges.findIndex(
       (challenge) => !challenge.completed
     );
-    return uncompletedIndex != -1 ? 0 : uncompletedIndex;
+    return uncompletedIndex != -1 ? uncompletedIndex : 0;
   });
   const [status, setStatus] = useState<"correct" | "wrong" | "none">("none");
   const [selectedOption, setSelectedOption] = useState<number>();

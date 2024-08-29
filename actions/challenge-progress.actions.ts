@@ -1,3 +1,4 @@
+"use server";
 import db from "@/db/drizzle";
 import { getUserProgress } from "@/db/queries";
 import { challengeProgress, challenges, userProgress } from "@/db/schema";
@@ -68,6 +69,48 @@ export const upsertChallengeProgress = async (challengeId: number) => {
   revalidatePath("/learn");
   revalidatePath("/lesson");
   revalidatePath("/quests");
+  revalidatePath("/quests");
+  revalidatePath("/leaderboard");
+  revalidatePath(`/lesson/${lessonId}`);
+};
+
+export const reduceHearts = async (challengeId: number) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+  const currentUserProgress = await getUserProgress();
+  /* TODO: User subscription */
+  const challenge = await db.query.challenges.findFirst({
+    where: eq(challenges.id, challengeId),
+  });
+  if (!challenge) {
+    throw new Error("Challenge not found");
+  }
+  const lessonId = challenge.lessonId;
+  const existingChallengeProgress = await db.query.challengeProgress.findFirst({
+    where:
+      (eq(challengeProgress.userId, userId),
+      eq(challengeProgress.challengeId, challengeId)),
+  });
+  const isPractice = !!existingChallengeProgress;
+  if (isPractice) {
+    return { error: "practice" };
+  }
+  if (!currentUserProgress) {
+    throw new Error("User Progress not found");
+  }
+  if (!currentUserProgress.hearts) {
+    return { error: "hearts" };
+  }
+  await db
+    .update(userProgress)
+    .set({
+      hearts: Math.max(currentUserProgress.hearts - 1, 0),
+    })
+    .where(eq(userProgress.userId, userId));
+  revalidatePath("/shop");
+  revalidatePath("/learn");
   revalidatePath("/quests");
   revalidatePath("/leaderboard");
   revalidatePath(`/lesson/${lessonId}`);

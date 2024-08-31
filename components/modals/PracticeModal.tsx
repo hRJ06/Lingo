@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,12 +13,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useExitModal } from "@/store/use-exit-modal";
+import { usePracticeModal } from "@/store/use-practice-modal";
 
-export const ExitModal = () => {
-  const router = useRouter();
+export const PracticeModal = () => {
   const [isClient, setIsClient] = useState(false);
-  const { isOpen, close } = useExitModal();
+  const { isOpen, close } = usePracticeModal();
 
   useEffect(() => setIsClient(true), []);
 
@@ -30,20 +28,16 @@ export const ExitModal = () => {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="mb-5 flex w-full items-center justify-center">
-            <Image
-              src="/mascot_sad.svg"
-              alt="Mascot Sad"
-              height={80}
-              width={80}
-            />
+            <Image src="/heart.svg" alt="Heart" height={100} width={100} />
           </div>
 
           <DialogTitle className="text-center text-2xl font-bold">
-            Wait, don&apos;t go!
+            Practice lesson
           </DialogTitle>
 
           <DialogDescription className="text-center text-base">
-            You&apos;re about to leave the lesson. Are you sure?
+            Use practice lessons to regain hearts and points. You cannot loose
+            hearts or points in practice lessons.
           </DialogDescription>
         </DialogHeader>
 
@@ -55,19 +49,7 @@ export const ExitModal = () => {
               size="lg"
               onClick={close}
             >
-              Keep learning
-            </Button>
-
-            <Button
-              variant="dangerOutline"
-              className="w-full"
-              size="lg"
-              onClick={() => {
-                close();
-                router.push("/learn");
-              }}
-            >
-              End session
+              I understand
             </Button>
           </div>
         </DialogFooter>

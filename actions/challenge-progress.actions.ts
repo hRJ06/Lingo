@@ -1,6 +1,6 @@
 "use server";
 import db from "@/db/drizzle";
-import { getUserProgress } from "@/db/queries";
+import { getUserProgress, getUserSubscription } from "@/db/queries";
 import { challengeProgress, challenges, userProgress } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
@@ -12,12 +12,14 @@ export const upsertChallengeProgress = async (challengeId: number) => {
     throw new Error("Unauthorized");
   }
   const currentUserProgress = await getUserProgress();
+  const userSubscription = await getUserSubscription();
   if (!currentUserProgress) {
     throw new Error("User Progress not found");
   }
   const challenge = await db.query.challenges.findFirst({
     where: eq(challenges.id, challengeId),
   });
+
   if (!challenge) {
     throw new Error("Challenge not found");
   }
@@ -29,8 +31,12 @@ export const upsertChallengeProgress = async (challengeId: number) => {
     ),
   });
   const isPractice = !!existingChallengeProgress;
-  /* TODO: HANDLE SUBSCRIPTION CASE */
-  if (!currentUserProgress.hearts && !isPractice) {
+
+  if (
+    !currentUserProgress.hearts &&
+    !isPractice &&
+    !userSubscription?.isActive
+  ) {
     return { error: "hearts" };
   }
   if (isPractice) {
@@ -73,4 +79,3 @@ export const upsertChallengeProgress = async (challengeId: number) => {
   revalidatePath("/leaderboard");
   revalidatePath(`/lesson/${lessonId}`);
 };
-

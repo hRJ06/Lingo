@@ -5,10 +5,7 @@ import { Header } from "@/app/lesson/Header";
 import { QuestionBubble } from "./QuesionBubble";
 import { Challenge } from "./Challenge";
 import { Footer } from "./footer";
-import {
-  reduceHearts,
-  upsertChallengeProgress,
-} from "@/actions/challenge-progress.actions";
+import { upsertChallengeProgress } from "@/actions/challenge-progress.actions";
 import { toast } from "sonner";
 import { useAudio, useMount, useWindowSize } from "react-use";
 import Confetti from "react-confetti";
@@ -17,6 +14,7 @@ import { ResultCard } from "./ResultCard";
 import { useRouter } from "next/navigation";
 import { useHeartsModal } from "@/store/use-hearts-modal";
 import { usePracticeModal } from "@/store/use-practice-modal";
+import { reduceHearts } from "@/actions/user-progess.actions";
 
 type Props = {
   initialPercentage: number;

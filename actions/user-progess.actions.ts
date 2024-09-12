@@ -1,13 +1,17 @@
 "use server";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { getCourseById, getUserProgress } from "@/db/queries";
+import {
+  getCourseById,
+  getUserProgress,
+  getUserSubscription,
+} from "@/db/queries";
 import { challengeProgress, challenges, userProgress } from "@/db/schema";
 import db from "@/db/drizzle";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
+import { POINTS_TO_REFILL } from "@/constants";
 
-const POINTS_TO_REFILL = 10;
 
 export const upsertUserProgress = async (courseId: number) => {
   const { userId } = await auth();
@@ -19,10 +23,9 @@ export const upsertUserProgress = async (courseId: number) => {
   if (!course) {
     throw new Error("Course not found");
   }
-  /* TODO */
-  // if(!course.units.length || !course.units[0].lessons.length) {
-  //     throw new Error("Course is empty");
-  // }
+  if (!course.units.length || !course.units[0].lessons.length) {
+    throw new Error("Course is empty");
+  }
   const existingUserProgress = await getUserProgress();
   if (existingUserProgress) {
     await db.update(userProgress).set({
@@ -49,7 +52,7 @@ export const reduceHearts = async (challengeId: number) => {
     throw new Error("Unauthorized");
   }
   const currentUserProgress = await getUserProgress();
-  /* TODO: User subscription */
+  const userSubscription = await getUserSubscription();
   const challenge = await db.query.challenges.findFirst({
     where: eq(challenges.id, challengeId),
   });
@@ -68,6 +71,9 @@ export const reduceHearts = async (challengeId: number) => {
   }
   if (!currentUserProgress) {
     throw new Error("User Progress not found");
+  }
+  if (userSubscription?.isActive) {
+    return { error: "subscription" };
   }
   if (!currentUserProgress.hearts) {
     return { error: "hearts" };

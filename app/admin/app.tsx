@@ -1,6 +1,9 @@
 "use client";
-import { Admin, ListGuesser, Resource } from "react-admin";
+import { Admin, Resource } from "react-admin";
 import simpleRestProvide from "ra-data-simple-rest";
+import { CourseList } from "./course/list";
+import { CourseCreate } from "./course/create";
+import { CourseEdit } from "./course/edit";
 
 const dataProvider = simpleRestProvide("/api");
 
@@ -9,7 +12,9 @@ const App = () => {
     <Admin dataProvider={dataProvider}>
       <Resource
         name="courses"
-        list={ListGuesser}
+        list={CourseList}
+        edit={CourseEdit}
+        create={CourseCreate}
         recordRepresentation="title"
       />
     </Admin>

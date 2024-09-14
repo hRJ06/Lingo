@@ -20,10 +20,18 @@ const nextConfig = {
           {
             key: "Content-Range",
             value: "bytes : 0-9/*",
-          }
+          },
         ],
       },
     ];
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
 };
 

@@ -13,7 +13,7 @@ export const LessonList = () => {
         <NumberField source="id" />
         <TextField source="title" />
         <ReferenceField source="unitId" reference="units" />
-        <TextField source="order" />
+        <NumberField source="order" />
       </Datagrid>
     </List>
   );

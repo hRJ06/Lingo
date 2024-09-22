@@ -13,7 +13,12 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
       - name: Create .env file
-        run: echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}" >> .env && echo "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}" >> .env && echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env && echo "SITE_URL=${{ secrets.SITE_URL }}" >> .env
+        run: |
+          echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}" >> .env
+          echo "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> .env
       - name: Build Docker Image
         run: docker build -t hrj06/lingo .
       - name: Login to Docker Hub
@@ -28,6 +33,6 @@ jobs:
       - name: Pull Image from Docker Hub
         run: docker pull hrj06/lingo:latest
       - name: Delete old container
-        run: docker rm -f lingo-ec2-container
+        run: docker rm -f lingo-ec2-container || true
       - name: Run Docker container
         run: docker run -d -p 3000:3000 --name lingo-ec2-container hrj06/lingo

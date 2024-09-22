@@ -1,8 +1,11 @@
 name: Build and deploy Next.Js app to Amazon EC2 - Lingo
+
 on:
   push:
     branches:
       - main
+  workflow_dispatch: 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,6 +20,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Publish Image to Docker Hub
         run: docker push hrj06/lingo:latest
+
   deploy:
     needs: build
     runs-on: self-hosted

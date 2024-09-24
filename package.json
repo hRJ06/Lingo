@@ -24,7 +24,7 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
     "lingo": "file:",
-    "lucide-react": "^0.400.0",
+    "lucide-react": "^0.438.0",
     "next": "14.2.10",
     "next-themes": "^0.3.0",
     "ra-data-simple-rest": "^5.1.4",

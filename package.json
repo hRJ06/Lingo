@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.5.2",
-    "@neondatabase/serverless": "^0.9.4",
+    "@neondatabase/serverless": "^0.9.5",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-progress": "^1.1.0",

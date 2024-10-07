@@ -29,7 +29,7 @@
     "next-themes": "^0.3.0",
     "ra-data-simple-rest": "^5.1.4",
     "react": "^18",
-    "react-admin": "^5.1.5",
+    "react-admin": "^5.2.2",
     "react-circular-progressbar": "^2.1.0",
     "react-confetti": "^6.1.0",
     "react-dom": "^18",
